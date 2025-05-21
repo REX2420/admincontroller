@@ -29,66 +29,73 @@ const AdminDashboardPage = async () => {
   );
 
   return (
-    <div className="container">
-      <div className="my-[20px]">
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
         <DashboardCard data={data} />
       </div>
-      <div className="titleStyle">Orders</div>
-      <div className="flex justify-evenly items-center my-[20px]">
-        <div className="h-[100px] gap-[10px] border-2 border-gray-400 p-[10px] w-[200px] shadow-2xl flex items-center justify-center rounded-3xl">
-          <HiCurrencyRupee size={100} /> ₹ {allOrdersData?.totalSales} Total
-          Sales
+      <div className="text-3xl font-bold mb-6 text-gray-800">Orders</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-gradient-to-br from-blue-400 to-blue-500 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center space-x-4">
+            <div className="bg-white/20 p-3 rounded-xl">
+              <HiCurrencyRupee size={40} className="text-white" />
+            </div>
+            <div className="text-white">
+              <p className="text-2xl font-bold">₹{allOrdersData?.totalSales}</p>
+              <p className="text-sm opacity-90">Total Sales</p>
+            </div>
+          </div>
         </div>
-        <div className="h-[100px] gap-[10px] border-2 border-gray-400 p-[10px] w-[200px] shadow-2xl flex items-center justify-center rounded-3xl">
-          <HiCurrencyRupee size={100} /> ₹ {allOrdersData?.lastMonthSales} Last
-          Month Sales
-        </div>{" "}
-        <div className="h-[100px] gap-[10px] border-2 border-gray-400 p-[10px] w-[200px] shadow-2xl flex items-center justify-center rounded-3xl">
-          <HiCurrencyRupee size={100} /> ₹ {allOrdersData?.growthPercentage}{" "}
-          Growth Percentage
+        <div className="bg-gradient-to-br from-purple-400 to-purple-500 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center space-x-4">
+            <div className="bg-white/20 p-3 rounded-xl">
+              <HiCurrencyRupee size={40} className="text-white" />
+            </div>
+            <div className="text-white">
+              <p className="text-2xl font-bold">₹{allOrdersData?.lastMonthSales}</p>
+              <p className="text-sm opacity-90">Last Month Sales</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center space-x-4">
+            <div className="bg-white/20 p-3 rounded-xl">
+              <HiCurrencyRupee size={40} className="text-white" />
+            </div>
+            <div className="text-white">
+              <p className="text-2xl font-bold">₹{allOrdersData?.growthPercentage}</p>
+              <p className="text-sm opacity-90">Growth Percentage</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="my-[20px]">
-        <div className="">
-          <div className="SecondaryTitleStyle">Recent Orders</div>
-        </div>
-        <div className="w-full">
-          <TableContainer component={Paper}>
+      <div className="mb-8">
+        <div className="text-2xl font-bold mb-4 text-gray-800">Recent Orders</div>
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <TableContainer>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell style={{ border: "2px solid black" }}>
-                    Name
-                  </TableCell>
-                  <TableCell style={{ border: "2px solid black" }}>
-                    Total
-                  </TableCell>
-                  <TableCell style={{ border: "2px solid black" }}>
-                    Payment
-                  </TableCell>
-                  <TableCell style={{ border: "2px solid black" }}>
-                    View
-                  </TableCell>
+                <TableRow className="bg-gray-50">
+                  <TableCell className="font-semibold">Name</TableCell>
+                  <TableCell className="font-semibold">Total</TableCell>
+                  <TableCell className="font-semibold">Payment</TableCell>
+                  <TableCell className="font-semibold">View</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data?.orders?.map((order: any, index: any) => (
-                  <TableRow key={index}>
-                    <TableCell style={{ border: "2px solid black" }}>
-                      {order?.user?.email}
-                    </TableCell>
-                    <TableCell style={{ border: "2px solid black" }}>
-                      ₹ {order.total}
-                    </TableCell>
-                    <TableCell style={{ border: "2px solid black" }}>
+                  <TableRow key={index} className="hover:bg-gray-50">
+                    <TableCell>{order?.user?.email}</TableCell>
+                    <TableCell>₹{order.total}</TableCell>
+                    <TableCell>
                       {order.isPaid ? (
-                        <FaCheckCircle size={23} color="green" />
+                        <FaCheckCircle size={23} className="text-green-500" />
                       ) : (
-                        <IoIosCloseCircle size={25} color="red" />
+                        <IoIosCloseCircle size={25} className="text-red-500" />
                       )}
                     </TableCell>
-                    <TableCell style={{ border: "2px solid black" }}>
-                      <Link href={`/order/${order._id}`}>
+                    <TableCell>
+                      <Link href={`/order/${order._id}`} className="text-blue-500 hover:text-blue-700">
                         <SlEye />
                       </Link>
                     </TableCell>

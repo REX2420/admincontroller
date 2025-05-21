@@ -38,70 +38,79 @@ const ProductData = () => {
     topSellingProducts();
   }, []);
   return (
-    <div className="">
-      <div className="SecondaryTitleStyle">Product Performance</div>
-      <div className="flex gap-[10px] my-[20px]">
-        <div className="shadow-xl bg-gray-200 rounded-xl w-[50%]">
-          <p className="px-[20px] py-[20px] text-2xl font-bold">
-            Size Performance for the product:
-          </p>
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-gray-800 mb-8">Product Performance</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-2xl shadow-lg p-6 transition-all hover:shadow-xl">
+          <h3 className="text-xl font-semibold text-gray-700 mb-6">
+            Size Performance
+          </h3>
           {sizeData?.length > 0 ? (
-            <PieChart width={800} height={400} className="ml-[-100px]">
-              <Pie
-                data={sizeData}
-                cx={400}
-                cy={200}
-                labelLine={false}
-                label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
-                }
-                outerRadius={150}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {sizeData?.length > 0 &&
-                  sizeData?.map((entry: any, index: any) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
+            <div className="flex justify-center">
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={sizeData}
+                  cx={200}
+                  cy={200}
+                  labelLine={false}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
+                  outerRadius={150}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {sizeData?.length > 0 &&
+                    sizeData?.map((entry: any, index: any) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </div>
           ) : (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center h-[400px] text-gray-500">
               No Data Found
             </div>
           )}
         </div>
-        <div className="shadow-xl bg-gray-200 rounded-xl w-[50%]">
-          <p className="px-[20px] py-[20px] text-2xl font-bold">
-            Top Selling Products:
-          </p>
+        <div className="bg-white rounded-2xl shadow-lg p-6 transition-all hover:shadow-xl">
+          <h3 className="text-xl font-semibold text-gray-700 mb-6">
+            Top Selling Products
+          </h3>
           {topSellingProducts?.length > 0 ? (
-            <PieChart width={700} height={400} className="ml-[100px]">
-              <Pie
-                data={topSellingProducts}
-                cx={200}
-                cy={200}
-                outerRadius={150}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {topSellingProducts?.length > 0 &&
-                  topSellingProducts?.map((entry: any, index: any) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+            <div className="flex justify-center">
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={topSellingProducts}
+                  cx={200}
+                  cy={200}
+                  labelLine={false}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
+                  outerRadius={150}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {topSellingProducts?.length > 0 &&
+                    topSellingProducts?.map((entry: any, index: any) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </div>
           ) : (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center h-[400px] text-gray-500">
               No Data Found
             </div>
           )}

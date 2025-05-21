@@ -13,16 +13,16 @@ import { getLowStockProducts } from "@/lib/database/actions/admin/dashboard/dash
 const LowStockProducts = async () => {
   const products = await getLowStockProducts().catch((err) => console.log(err));
   return (
-    <div className="w-full container">
-      <div className="SecondaryTitleStyle">Low Stock Products</div>
-      <div className="">
-        <TableContainer component={Paper}>
+    <div className="w-full container mx-auto px-4 py-8">
+      <div className="text-2xl font-bold mb-4 text-gray-800">Low Stock Products</div>
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <TableContainer>
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Product Name</TableCell>
-                <TableCell>Size</TableCell>
-                <TableCell>Stock Quantity</TableCell>
+              <TableRow className="bg-gray-50">
+                <TableCell className="font-semibold">Product Name</TableCell>
+                <TableCell className="font-semibold">Size</TableCell>
+                <TableCell className="font-semibold">Stock Quantity</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -32,10 +32,14 @@ const LowStockProducts = async () => {
                     subProduct.sizes?.map((size: any) => {
                       if (size && size.qty < 2) {
                         return (
-                          <TableRow key={size._id}>
+                          <TableRow key={size._id} className="hover:bg-gray-50">
                             <TableCell>{product.name}</TableCell>
                             <TableCell>{size.size}</TableCell>
-                            <TableCell>{size.qty}</TableCell>
+                            <TableCell>
+                              <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                {size.qty}
+                              </span>
+                            </TableCell>
                           </TableRow>
                         );
                       }
@@ -45,7 +49,7 @@ const LowStockProducts = async () => {
                 )
               ) : (
                 <TableRow>
-                  <TableCell colSpan={3} align="center">
+                  <TableCell colSpan={3} align="center" className="py-8 text-gray-500">
                     No low stock products found.
                   </TableCell>
                 </TableRow>
