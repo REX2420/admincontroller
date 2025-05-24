@@ -4,7 +4,22 @@ import { SiProducthunt } from "react-icons/si";
 import { SlHandbag } from "react-icons/sl";
 import React from "react";
 
-const DashboardCard = ({ data }: { data: any }) => {
+interface DashboardData {
+  orders?: any[];
+  products?: any[];
+}
+
+const DashboardCard = ({ data }: { data: DashboardData | undefined }) => {
+  // Provide fallback values to prevent undefined errors
+  const orders = data?.orders || [];
+  const products = data?.products || [];
+  
+  // Calculate totals safely
+  const totalRevenue = orders.reduce((a: any, val: any) => a + (val.total || 0), 0);
+  const unpaidAmount = orders
+    .filter((o: any) => !o.isPaid)
+    .reduce((a: any, val: any) => a + (val.total || 0), 0);
+
   return (
     <div className="p-6">
       <div className="text-3xl font-bold mb-8 text-gray-800">Dashboard</div>
@@ -15,7 +30,7 @@ const DashboardCard = ({ data }: { data: any }) => {
               <SlHandbag size={35} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">{data.orders.length}</p>
+              <p className="text-2xl font-bold">{orders.length}</p>
               <p className="text-sm opacity-90">Total Orders</p>
             </div>
           </div>
@@ -26,7 +41,7 @@ const DashboardCard = ({ data }: { data: any }) => {
               <SiProducthunt size={35} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">{data.products.length}</p>
+              <p className="text-2xl font-bold">{products.length}</p>
               <p className="text-sm opacity-90">Total Products</p>
             </div>
           </div>
@@ -38,14 +53,10 @@ const DashboardCard = ({ data }: { data: any }) => {
             </div>
             <div className="text-white">
               <p className="text-2xl font-bold">
-                ${data.orders.reduce((a: any, val: any) => a + val.total, 0).toFixed(2)}
+                ${totalRevenue.toFixed(2)}
               </p>
               <p className="text-sm opacity-90">
-                ${data.orders
-                  .filter((o: any) => !o.isPaid)
-                  .reduce((a: any, val: any) => a + val.total, 0)
-                  .toFixed(2)}{" "}
-                unpaid
+                ${unpaidAmount.toFixed(2)} unpaid
               </p>
             </div>
           </div>

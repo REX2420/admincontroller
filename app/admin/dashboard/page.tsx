@@ -23,15 +23,36 @@ import LowStockProducts from "@/components/admin/dashboard/low-stock-products";
 import OutOfStockProducts from "@/components/admin/dashboard/out-of-stock-products";
 
 const AdminDashboardPage = async () => {
-  const data = await getDashboardData().catch((err) => console.log(err));
-  const allOrdersData = await calculateTotalOrders().catch((err) =>
-    console.log(err)
-  );
+  const data = await getDashboardData().catch((err) => {
+    console.log("Dashboard data error:", err);
+    return { orders: [], products: [] }; // Fallback data
+  });
+  
+  const allOrdersData = await calculateTotalOrders().catch((err) => {
+    console.log("Orders calculation error:", err);
+    return {
+      totalSales: 0,
+      lastMonthSales: 0,
+      growthPercentage: "0.00"
+    }; // Fallback data
+  });
+
+  // Ensure data has the expected structure
+  const safeData = {
+    orders: data?.orders || [],
+    products: data?.products || []
+  };
+
+  const safeOrdersData = {
+    totalSales: allOrdersData?.totalSales || 0,
+    lastMonthSales: allOrdersData?.lastMonthSales || 0,
+    growthPercentage: allOrdersData?.growthPercentage || "0.00"
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <DashboardCard data={data} />
+        <DashboardCard data={safeData} />
       </div>
       <div className="text-3xl font-bold mb-6 text-gray-800">Orders</div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -41,7 +62,7 @@ const AdminDashboardPage = async () => {
               <HiCurrencyRupee size={40} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">₹{allOrdersData?.totalSales}</p>
+              <p className="text-2xl font-bold">₹{safeOrdersData.totalSales}</p>
               <p className="text-sm opacity-90">Total Sales</p>
             </div>
           </div>
@@ -52,7 +73,7 @@ const AdminDashboardPage = async () => {
               <HiCurrencyRupee size={40} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">₹{allOrdersData?.lastMonthSales}</p>
+              <p className="text-2xl font-bold">₹{safeOrdersData.lastMonthSales}</p>
               <p className="text-sm opacity-90">Last Month Sales</p>
             </div>
           </div>
@@ -63,7 +84,7 @@ const AdminDashboardPage = async () => {
               <HiCurrencyRupee size={40} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">₹{allOrdersData?.growthPercentage}</p>
+              <p className="text-2xl font-bold">₹{safeOrdersData.growthPercentage}</p>
               <p className="text-sm opacity-90">Growth Percentage</p>
             </div>
           </div>
@@ -83,24 +104,32 @@ const AdminDashboardPage = async () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.orders?.map((order: any, index: any) => (
-                  <TableRow key={index} className="hover:bg-gray-50">
-                    <TableCell>{order?.user?.email}</TableCell>
-                    <TableCell>₹{order.total}</TableCell>
-                    <TableCell>
-                      {order.isPaid ? (
-                        <FaCheckCircle size={23} className="text-green-500" />
-                      ) : (
-                        <IoIosCloseCircle size={25} className="text-red-500" />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Link href={`/order/${order._id}`} className="text-blue-500 hover:text-blue-700">
-                        <SlEye />
-                      </Link>
+                {safeData.orders.length > 0 ? (
+                  safeData.orders.map((order: any, index: any) => (
+                    <TableRow key={index} className="hover:bg-gray-50">
+                      <TableCell>{order?.user?.email || 'N/A'}</TableCell>
+                      <TableCell>₹{order?.total || 0}</TableCell>
+                      <TableCell>
+                        {order?.isPaid ? (
+                          <FaCheckCircle size={23} className="text-green-500" />
+                        ) : (
+                          <IoIosCloseCircle size={25} className="text-red-500" />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Link href={`/order/${order?._id}`} className="text-blue-500 hover:text-blue-700">
+                          <SlEye />
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                      No orders found
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>

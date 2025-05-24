@@ -52,26 +52,42 @@ const AppBannerImages = () => {
       });
   };
   const handleUpload = async () => {
+    if (selectedImages.length === 0) {
+      alert("Please select images to upload");
+      return;
+    }
+
     setUploading(true);
 
-    // Convert images to base64
-    const base64Images = await Promise.all(
-      selectedImages.map((image) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-        });
-      })
-    );
-    await uploadAppBannerImages(base64Images).then((res) => {
+    try {
+      // Convert images to base64
+      const base64Images = await Promise.all(
+        selectedImages.map((image) => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+          });
+        })
+      );
+
+      const result = await uploadAppBannerImages(base64Images);
+      
+      if (result.success) {
+        alert(result.message || "Images uploaded successfully");
+        setPreviewImages([]);
+        setSelectedImages([]);
+        fetchFolderImages(); // Fetch images after uploading
+      } else {
+        alert(`Upload failed: ${result.error || "Unknown error"}`);
+      }
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      alert(`Upload failed: ${error.message || "Network error"}`);
+    } finally {
       setUploading(false);
-      alert("Images uploaded successfully");
-      setPreviewImages([]);
-      setSelectedImages([]);
-      fetchFolderImages(); // Fetch images after uploading
-    });
+    }
   };
   const handleDelete = async (public_id: string) => {
     try {

@@ -23,7 +23,12 @@ export const getDashboardData = async () => {
       products: JSON.parse(JSON.stringify(products)),
     };
   } catch (error: any) {
-    console.log(error);
+    console.log("Error fetching dashboard data:", error);
+    // Return fallback data structure to prevent undefined errors
+    return {
+      orders: [],
+      products: [],
+    };
   }
 };
 
@@ -48,7 +53,10 @@ export const getLowStockProducts = async () => {
       lowStockProducts: JSON.parse(JSON.stringify(lowStockProducts)),
     };
   } catch (error: any) {
-    console.log(error);
+    console.log("Error fetching low stock products:", error);
+    return {
+      lowStockProducts: [],
+    };
   }
 };
 
@@ -72,7 +80,10 @@ export const getOutOfStockProducts = async () => {
       outOfStockProducts: JSON.parse(JSON.stringify(outOfStockProducts)),
     };
   } catch (error: any) {
-    console.log(error);
+    console.log("Error fetching out of stock products:", error);
+    return {
+      outOfStockProducts: [],
+    };
   }
 };
 
@@ -119,7 +130,14 @@ export const calculateTotalOrders = async () => {
       growthPercentage: growthPercentage.toFixed(2),
     };
   } catch (error: any) {
-    console.log(error);
+    console.log("Error calculating total orders:", error);
+    return {
+      todaySales: 0,
+      totalSales: 0,
+      lastMonthSales: 0,
+      lastWeekSales: 0,
+      growthPercentage: "0.00",
+    };
   }
 };
 
@@ -148,6 +166,12 @@ export const orderSummary = async () => {
       cancelledOrders,
     };
   } catch (error: any) {
-    console.log(error);
+    console.log("Error fetching order summary:", error);
+    return {
+      newOrders: 0,
+      pendingOrders: 0,
+      completedOrders: 0,
+      cancelledOrders: 0,
+    };
   }
 };
