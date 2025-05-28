@@ -62,7 +62,7 @@ const AdminDashboardPage = async () => {
               <HiCurrencyRupee size={40} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">₹{safeOrdersData.totalSales}</p>
+              <p className="text-2xl font-bold">MVR{safeOrdersData.totalSales}</p>
               <p className="text-sm opacity-90">Total Sales</p>
             </div>
           </div>
@@ -73,7 +73,7 @@ const AdminDashboardPage = async () => {
               <HiCurrencyRupee size={40} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">₹{safeOrdersData.lastMonthSales}</p>
+              <p className="text-2xl font-bold">MVR{safeOrdersData.lastMonthSales}</p>
               <p className="text-sm opacity-90">Last Month Sales</p>
             </div>
           </div>
@@ -84,7 +84,7 @@ const AdminDashboardPage = async () => {
               <HiCurrencyRupee size={40} className="text-white" />
             </div>
             <div className="text-white">
-              <p className="text-2xl font-bold">₹{safeOrdersData.growthPercentage}</p>
+              <p className="text-2xl font-bold">MVR{safeOrdersData.growthPercentage}</p>
               <p className="text-sm opacity-90">Growth Percentage</p>
             </div>
           </div>
@@ -108,7 +108,7 @@ const AdminDashboardPage = async () => {
                   safeData.orders.map((order: any, index: any) => (
                     <TableRow key={index} className="hover:bg-gray-50">
                       <TableCell>{order?.user?.email || 'N/A'}</TableCell>
-                      <TableCell>₹{order?.total || 0}</TableCell>
+                      <TableCell>MVR{order?.total || 0}</TableCell>
                       <TableCell>
                         {order?.isPaid ? (
                           <FaCheckCircle size={23} className="text-green-500" />
