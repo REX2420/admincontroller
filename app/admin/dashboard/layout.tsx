@@ -61,6 +61,9 @@ export default function DashboardLayout({
             <Link href={"/admin/dashboard/homescreenoffers"}>
               <Button variant="outline">Home Screen Offers</Button>
             </Link>
+            <Link href={"/admin/dashboard/marquee"}>
+              <Button variant="outline">Marquee Texts</Button>
+            </Link>
             <Link href={"/admin/dashboard/reviews"}>
               <Button variant="outline">Manage product reviews</Button>
             </Link>
