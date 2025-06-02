@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 
 import { useDisclosure } from "@mantine/hooks";
-import { MdOutlineCategory, MdSpaceDashboard } from "react-icons/md";
+import { MdOutlineCategory, MdSpaceDashboard, MdSettings } from "react-icons/md";
 import { IoListCircleSharp } from "react-icons/io5";
 import { FaTable } from "react-icons/fa";
 import { BsPatchPlus } from "react-icons/bs";
@@ -63,6 +63,9 @@ export default function DashboardLayout({
             </Link>
             <Link href={"/admin/dashboard/marquee"}>
               <Button variant="outline">Marquee Texts</Button>
+            </Link>
+            <Link href={"/admin/dashboard/footer"}>
+              <Button variant="outline">Footer Management</Button>
             </Link>
             <Link href={"/admin/dashboard/reviews"}>
               <Button variant="outline">Manage product reviews</Button>
@@ -147,6 +150,15 @@ export default function DashboardLayout({
               </Link>
               <Link href={"/admin/dashboard/subCategories"}>
                 <div className="">Sub Categories</div>
+              </Link>
+            </div>
+            <div className="">Website Management:</div>
+            <div className="flex gap-[30px] items-center p-[10px] rounded-md hover:bg-blue-100">
+              <Link href={"/admin/dashboard/footer"}>
+                <MdSettings size={20} />
+              </Link>
+              <Link href={"/admin/dashboard/footer"}>
+                <div className="">Footer Management</div>
               </Link>
             </div>
             <div className="">Analytics:</div>
