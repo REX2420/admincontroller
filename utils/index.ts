@@ -14,6 +14,20 @@ export const verify_vendor = async () => {
     console.log(error);
   }
 };
+
+export const verify_admin = async () => {
+  try {
+    const nextCookies = await cookies();
+    const admin_token = nextCookies.get("admin_token");
+    const decode = jwt.verify(admin_token?.value, process.env.JWT_SECRET);
+    const { ObjectId } = mongoose.Types;
+    const adminObjectId = new ObjectId(decode.id);
+    return { id: adminObjectId };
+  } catch (error: any) {
+    console.log(error);
+  }
+};
+
 export const base64ToBuffer = (base: any) => {
   const base64String = base.split(";base64,").pop();
   return Buffer.from(base64String, "base64");

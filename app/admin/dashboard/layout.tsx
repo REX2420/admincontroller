@@ -13,7 +13,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { MdOutlineCategory, MdSpaceDashboard, MdSettings } from "react-icons/md";
 import { IoListCircleSharp } from "react-icons/io5";
-import { FaTable } from "react-icons/fa";
+import { FaTable, FaBlog } from "react-icons/fa";
 import { BsPatchPlus } from "react-icons/bs";
 import { RiCoupon3Fill } from "react-icons/ri";
 import { VscGraph } from "react-icons/vsc";
@@ -150,6 +150,23 @@ export default function DashboardLayout({
               </Link>
               <Link href={"/admin/dashboard/subCategories"}>
                 <div className="">Sub Categories</div>
+              </Link>
+            </div>
+            <div className="">Blogs:</div>
+            <div className="flex gap-[30px] items-center p-[10px] rounded-md hover:bg-blue-100">
+              <Link href={"/admin/dashboard/blogs"}>
+                <FaBlog size={20} />
+              </Link>
+              <Link href={"/admin/dashboard/blogs"}>
+                <div className="">Blog Management</div>
+              </Link>
+            </div>
+            <div className="flex gap-[30px] items-center p-[10px] rounded-md hover:bg-blue-100">
+              <Link href={"/admin/dashboard/blogs/create"}>
+                <BsPatchPlus size={20} />
+              </Link>
+              <Link href={"/admin/dashboard/blogs/create"}>
+                <div className="">Create Blog</div>
               </Link>
             </div>
             <div className="">Website Management:</div>
