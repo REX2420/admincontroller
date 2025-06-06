@@ -1,5 +1,6 @@
 "use server";
 import { v2 as cloudinary } from "cloudinary";
+import { BannerCacheInvalidation } from "@/lib/cache-utils";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME as string,
   api_key: process.env.CLOUDINARY_API_KEY as string,
@@ -85,6 +86,9 @@ export const uploadWebsiteBannerImages = async (images: any) => {
       public_id: img.public_id,
       tags: img.tags,
     }));
+
+    // Invalidate website banner cache after successful upload
+    await BannerCacheInvalidation.websiteBanners();
 
     return {
       success: true,
@@ -181,6 +185,9 @@ export const uploadAppBannerImages = async (images: any) => {
       tags: img.tags,
     }));
 
+    // Invalidate app banner cache after successful upload
+    await BannerCacheInvalidation.appBanners();
+
     return {
       success: true,
       imageUrls,
@@ -201,6 +208,11 @@ export const deleteAnyBannerId = async (publicId: string) => {
   try {
     const result = await cloudinary.uploader.destroy(publicId);
     if (result.result == "ok") {
+      
+      // Invalidate both banner caches after successful deletion
+      // Since we don't know if it was website or app banner, invalidate both
+      await BannerCacheInvalidation.allBanners();
+      
       return {
         success: true,
         message: "Successfully deleted image.",

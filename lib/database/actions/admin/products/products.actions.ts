@@ -6,6 +6,7 @@ import slugify from "slugify";
 import cloudinary from "cloudinary";
 import mongoose from "mongoose";
 import { User } from "lucide-react";
+import { ProductCacheInvalidation } from "@/lib/cache-utils";
 const { ObjectId } = mongoose.Types;
 
 // config our Cloudinary
@@ -69,7 +70,6 @@ export const createProduct = async (
       const slug = slugify(name);
       const newProduct = new Product({
         name,
-
         description,
         longDescription,
         brand,
@@ -92,6 +92,12 @@ export const createProduct = async (
         featured,
       });
       await newProduct.save();
+      
+      // Invalidate cache after creating a new product, especially if it's featured
+      if (featured) {
+        await ProductCacheInvalidation.featuredProducts();
+      }
+      
       return {
         message: "Product created successfully.",
         success: true,
@@ -110,13 +116,30 @@ export const createProduct = async (
 export const deleteProduct = async (productId: string) => {
   try {
     await connectToDatabase();
-    const product = await Product.findByIdAndDelete(productId);
-    if (!product) {
+    
+    // Get the product before deleting to check if it was featured
+    const productToDelete = await Product.findById(productId);
+    if (!productToDelete) {
       return {
         message: "Product not found with this Id!",
         success: false,
       };
     }
+    
+    const wasFeatured = productToDelete.featured;
+    
+    // Now delete the product
+    const product = await Product.findByIdAndDelete(productId);
+    
+    // Invalidate cache after deleting a product
+    if (wasFeatured) {
+      await ProductCacheInvalidation.featuredProducts();
+    }
+    
+    // Always invalidate general products cache when deleting any product
+    // This affects search results, product listings, etc.
+    await ProductCacheInvalidation.allProducts();
+    
     return {
       message: "Product Successfully deleted!",
       success: true,
@@ -299,6 +322,10 @@ export const switchFeaturedProduct = async (
         success: false,
       };
     }
+    
+    // Invalidate featured products cache after successful update
+    await ProductCacheInvalidation.featuredProducts();
+    
     return {
       message: "Successfully updated product",
       success: true,

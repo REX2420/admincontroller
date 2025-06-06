@@ -6,6 +6,7 @@ import SubCategory from "@/lib/database/models/subCategory.model";
 import cloudinary from "cloudinary";
 import mongoose from "mongoose";
 import slugify from "slugify";
+import { SubcategoryCacheInvalidation } from "@/lib/cache-utils";
 // config our Cloudinary
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -97,6 +98,10 @@ export const createSubCategory = async (
       slug: slugify(name),
       images: imageUrls,
     }).save();
+    
+    // Invalidate subcategories cache after creating new subcategory
+    await SubcategoryCacheInvalidation.subcategories();
+    
     const subCategories = await SubCategory.find().sort({ updatedAt: -1 });
     return {
       success: true,
@@ -126,6 +131,10 @@ export const deleteSubCategory = async (id: string) => {
       cloudinary.v2.uploader.destroy(publicId)
     );
     await Promise.all(deleteImagePromises);
+    
+    // Invalidate subcategories cache after deleting subcategory
+    await SubcategoryCacheInvalidation.subcategories();
+    
     const subCategories = await SubCategory.find().sort({ updatedAt: -1 });
 
     return {
@@ -151,6 +160,10 @@ export const updateSubCategory = async (
         ? new mongoose.Types.ObjectId(parent)
         : null;
     await SubCategory.findByIdAndUpdate(id, { name, parent: updatedParent });
+    
+    // Invalidate subcategories cache after updating subcategory
+    await SubcategoryCacheInvalidation.subcategories();
+    
     const subCategories = await SubCategory.find().sort({ updatedAt: -1 });
 
     return {

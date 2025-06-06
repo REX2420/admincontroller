@@ -5,6 +5,7 @@ import Category from "@/lib/database/models/category.model";
 import slugify from "slugify";
 import cloudinary from "cloudinary";
 import { base64ToBuffer } from "@/utils";
+import { CategoryCacheInvalidation } from "@/lib/cache-utils";
 // config out cloudinary
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -48,6 +49,10 @@ export const createCategory = async (name: string, images: string[]) => {
       slug: slugify(name),
       images: imageUrls,
     }).save();
+    
+    // Invalidate categories cache after creating new category
+    await CategoryCacheInvalidation.categories();
+    
     const categories = await Category.find().sort({ updatedAt: -1 });
     return {
       success: true,
@@ -77,6 +82,10 @@ export const deleteCategory = async (id: string) => {
       cloudinary.v2.uploader.destroy(publicId)
     );
     await Promise.all(deleteImagePromises);
+    
+    // Invalidate categories cache after deleting category
+    await CategoryCacheInvalidation.categories();
+    
     const categories = await Category.find().sort({ updatedAt: -1 });
     return {
       success: true,
@@ -103,6 +112,10 @@ export const updateCategory = async (id: string, name: string) => {
         success: false,
       };
     }
+    
+    // Invalidate categories cache after updating category
+    await CategoryCacheInvalidation.categories();
+    
     const categories = await Category.find().sort({ updatedAt: -1 });
     return {
       message: "Successfully updated product!",
